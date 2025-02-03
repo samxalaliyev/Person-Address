@@ -1,0 +1,20 @@
+server:
+  servlet:
+    context-path: /personAdd
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/person-add
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+
+
+
+  jpa:
+    properties:
+      hibernate: format_sql=true
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
