@@ -93,4 +93,16 @@ public class AddressService {
         addressResponseDto.setPersonId(saveAddress.getPerson().getId());
         return addressResponseDto;
     }
+
+    public void deleteAddressById(Long id) {
+        Address address=addressRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("This addess not found with this id: " + id));
+
+        // Person ile ilişkiyi qopar
+        address.setPerson(null);
+        addressRepository.save(address);
+
+        // adresi sil
+        addressRepository.delete(address);
+    }
 }

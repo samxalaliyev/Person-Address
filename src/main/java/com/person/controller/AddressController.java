@@ -47,4 +47,14 @@ public class AddressController {
         AddressResponseDto responseDto= addressService.createOrUpdateAddress(id,requestDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAddressById(@PathVariable Long id){
+        try {
+            addressService.deleteAddressById(id);
+            return ResponseEntity.ok("Address deleted successfully with this id: " + id);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
 }
