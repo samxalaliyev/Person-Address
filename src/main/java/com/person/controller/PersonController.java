@@ -47,28 +47,33 @@ public class PersonController {
     }catch (RuntimeException e){
         return ResponseEntity.status(404).body(e.getMessage());
     }
-
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePersonById(@PathVariable Long id){
+        try {
+            personService.deletePersonById(id);
+            return ResponseEntity.ok("Person deleted successfully with id: " +id);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PersonResponseDto> updateOrCreatePerson(@PathVariable Long id,@RequestBody PersonRequestDto requestDto){
 
+            PersonResponseDto responseDto = personService.updateOrCreatePerson(id,requestDto);
+            return ResponseEntity.ok(responseDto);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updatePerson(@PathVariable Long id,@RequestBody PersonRequestDto requestDto){
+        try{
+            PersonResponseDto responseDto = personService.updatePerson(id,requestDto);
+            return ResponseEntity.ok(responseDto);
+        }catch (RuntimeException e){
+            return ResponseEntity.status(404).body("Person not found with this id: " + id);
+        }
+    }
 
 }

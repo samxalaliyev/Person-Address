@@ -72,6 +72,7 @@ public class PersonService {
                         dto.setId(address.getId());
                         dto.setCity(address.getCity());
                         dto.setAddress(address.getAddress());
+                        dto.setPersonId(person.getId());
                         return dto;
                     }).collect(Collectors.toList());
 
@@ -86,4 +87,41 @@ public class PersonService {
             throw new RuntimeException("Person not found with this id: " +id);
         }
     }
+
+    public void deletePersonById(Long id) {
+        Person person=personRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Person not found with id: " +id));
+
+        personRepository.delete(person);
+    }
+
+    public PersonResponseDto updateOrCreatePerson(Long id, PersonRequestDto requestDto){
+        Person person = personRepository.findById(id).orElse(new Person());
+
+        person.setName(requestDto.getName());
+        person.setAge(requestDto.getAge());
+
+        Person updatePerson=personRepository.save(person);
+
+        PersonResponseDto responseDto=new PersonResponseDto();
+        responseDto.setId(updatePerson.getId());
+        responseDto.setName(updatePerson.getName());
+        responseDto.setAge(updatePerson.getAge());
+        return responseDto;
+    }
+    public PersonResponseDto updatePerson(Long id, PersonRequestDto requestDto){
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Person not found with id: " + id));
+        person.setName(requestDto.getName());
+        person.setAge(requestDto.getAge());
+
+        Person updatePerson=personRepository.save(person);
+
+        PersonResponseDto responseDto=new PersonResponseDto();
+        responseDto.setId(updatePerson.getId());
+        responseDto.setName(updatePerson.getName());
+        responseDto.setAge(updatePerson.getAge());
+        return responseDto;
+    }
+
 }

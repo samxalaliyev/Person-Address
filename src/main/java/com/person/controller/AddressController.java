@@ -40,4 +40,11 @@ public class AddressController {
             return ResponseEntity.status(404).body("Address not found with this id: " +id);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponseDto> createOrUpdateAddress(@PathVariable Long id,
+                                                                    @RequestBody AddressRequestDto requestDto){
+        AddressResponseDto responseDto= addressService.createOrUpdateAddress(id,requestDto);
+        return ResponseEntity.ok(responseDto);
+    }
 }

@@ -73,4 +73,24 @@ public class AddressService {
         }
         return null;
     }
+
+    public AddressResponseDto createOrUpdateAddress(Long id, AddressRequestDto requestDto){
+        Person person=personRepository.findById(requestDto.getPersonId())
+                .orElseThrow(()->new RuntimeException("Person not found with this id: " + requestDto.getPersonId()));
+        Address address=addressRepository.findById(id).orElse(new Address());
+
+        address.setId(id);
+        address.setCity(requestDto.getCity());
+        address.setAddress(requestDto.getAddress());
+        address.setPerson(person);
+
+        Address saveAddress=addressRepository.save(address);
+
+        AddressResponseDto addressResponseDto =new AddressResponseDto();
+        addressResponseDto.setId(saveAddress.getId());
+        addressResponseDto.setAddress(saveAddress.getAddress());
+        addressResponseDto.setCity(saveAddress.getCity());
+        addressResponseDto.setPersonId(saveAddress.getPerson().getId());
+        return addressResponseDto;
+    }
 }
