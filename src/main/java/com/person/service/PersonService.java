@@ -9,6 +9,7 @@ import com.person.entity.Person;
 import com.person.exception.PersonException;
 import com.person.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class PersonService {
         return responseDto;
     }
 
+    @Cacheable(value = "person")
     public List<PersonResponseDto> getAllPerson(){
         List<Person> persons = personRepository.findAll();
 
@@ -48,6 +50,7 @@ public class PersonService {
         }).collect(Collectors.toList());
     }
 
+    @Cacheable(value = "person", key = "#id")
     public PersonResponseDto getPersonById(Long id) {
 
         //without exception version
