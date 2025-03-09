@@ -6,6 +6,7 @@ import com.person.dto.response.AddressResponseDto;
 import com.person.dto.response.PersonResponseDto;
 import com.person.dto.response.PersonWithAddressesResponseDto;
 import com.person.entity.Person;
+import com.person.exception.PersonException;
 import com.person.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,16 +49,31 @@ public class PersonService {
     }
 
     public PersonResponseDto getPersonById(Long id) {
-        Optional<Person> personOptional =personRepository.findById(id);
-        if (personOptional.isPresent()){
-            Person person = personOptional.get();
-            PersonResponseDto responseDto = new PersonResponseDto();
-            responseDto.setId(person.getId());
-            responseDto.setAge(person.getAge());
-            responseDto.setName(person.getName());
-            return responseDto;
-        }
-        return null;
+
+        //without exception version
+
+//        Optional<Person> personOptional =personRepository.findById(id);
+//        if (personOptional.isPresent()){
+//            Person person = personOptional.get();
+//            PersonResponseDto responseDto = new PersonResponseDto();
+//            responseDto.setId(person.getId());
+//            responseDto.setAge(person.getAge());
+//            responseDto.setName(person.getName());
+//            return responseDto;
+//        }
+//        return null;
+
+        // with exception version
+
+        Person person = personRepository.findById(id)
+                    .orElseThrow(() -> new PersonException("Person not found with id: " + id));
+
+        PersonResponseDto responseDto = new PersonResponseDto();
+        responseDto.setId(person.getId());
+        responseDto.setAge(person.getAge());
+        responseDto.setName(person.getName());
+        return responseDto;
+
     }
 
     public PersonWithAddressesResponseDto getPersonWithAddressById(Long id) {
